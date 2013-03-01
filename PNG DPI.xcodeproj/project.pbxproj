@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1B2A62634B9130F775357F26 /* PRHAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 1B2A6B31112BF1B489605118 /* PRHAppDelegate.m */; };
 		31BF320916E03B6800752EBF /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 31BF320816E03B6800752EBF /* Cocoa.framework */; };
 		31BF321316E03B6800752EBF /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 31BF321116E03B6800752EBF /* InfoPlist.strings */; };
 		31BF321516E03B6800752EBF /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 31BF321416E03B6800752EBF /* main.m */; };
@@ -17,6 +18,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		1B2A61FFE69FFDFABDEA5D7F /* PRHAppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PRHAppDelegate.h; sourceTree = "<group>"; };
+		1B2A6B31112BF1B489605118 /* PRHAppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PRHAppDelegate.m; sourceTree = "<group>"; };
 		31BF320516E03B6800752EBF /* PNG DPI.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "PNG DPI.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		31BF320816E03B6800752EBF /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		31BF320B16E03B6800752EBF /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
@@ -84,6 +87,8 @@
 		31BF320E16E03B6800752EBF /* PNG DPI */ = {
 			isa = PBXGroup;
 			children = (
+				1B2A61FFE69FFDFABDEA5D7F /* PRHAppDelegate.h */,
+				1B2A6B31112BF1B489605118 /* PRHAppDelegate.m */,
 				31BF322016E03B6900752EBF /* MainMenu.xib */,
 				31BF321A16E03B6800752EBF /* PRHDocument.h */,
 				31BF321B16E03B6800752EBF /* PRHDocument.m */,
@@ -173,6 +178,7 @@
 			files = (
 				31BF321516E03B6800752EBF /* main.m in Sources */,
 				31BF321C16E03B6800752EBF /* PRHDocument.m in Sources */,
+				1B2A62634B9130F775357F26 /* PRHAppDelegate.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

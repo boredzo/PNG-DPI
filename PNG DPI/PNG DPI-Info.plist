@@ -11,16 +11,24 @@
 			<array>
 				<string>png</string>
 			</array>
-			<key>CFBundleTypeIconFile</key>
-			<string></string>
+			<key>CFBundleTypeMIMETypes</key>
+			<array>
+				<string>image/png</string>
+			</array>
 			<key>CFBundleTypeName</key>
-			<string>DocumentType</string>
+			<string>Portable Network Graphics image</string>
 			<key>CFBundleTypeOSTypes</key>
 			<array>
-				<string>????</string>
+				<string>PNGf</string>
 			</array>
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
+			<key>LSItemContentTypes</key>
+			<array>
+				<string>public.png</string>
+			</array>
+			<key>LSTypeIsPackage</key>
+			<false/>
 			<key>NSDocumentClass</key>
 			<string>PRHDocument</string>
 		</dict>
@@ -40,7 +48,7 @@
 	<key>CFBundleShortVersionString</key>
 	<string>1.0</string>
 	<key>CFBundleSignature</key>
-	<string>????</string>
+	<string>PDPI</string>
 	<key>CFBundleVersion</key>
 	<string>1</string>
 	<key>LSMinimumSystemVersion</key>
@@ -51,5 +59,27 @@
 	<string>MainMenu</string>
 	<key>NSPrincipalClass</key>
 	<string>NSApplication</string>
+	<key>UTImportedTypeDeclarations</key>
+	<array>
+		<dict>
+			<key>UTTypeConformsTo</key>
+			<string>public.image</string>
+			<key>UTTypeDescription</key>
+			<string>Portable Network Graphics image</string>
+			<key>UTTypeIdentifier</key>
+			<string>public.png</string>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>com.apple.nspboard-type</key>
+				<string>Apple PNG pasteboard type</string>
+				<key>com.apple.ostype</key>
+				<string>PNGf</string>
+				<key>public.filename-extension</key>
+				<string>png</string>
+				<key>public.mime-type</key>
+				<string>image/png</string>
+			</dict>
+		</dict>
+	</array>
 </dict>
 </plist>
