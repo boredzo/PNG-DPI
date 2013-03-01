@@ -1,0 +1,7 @@
+//
+// Prefix header for all source files of the 'PNG DPI' target in the 'PNG DPI' project
+//
+
+#ifdef __OBJC__
+	#import <Cocoa/Cocoa.h>
+#endif

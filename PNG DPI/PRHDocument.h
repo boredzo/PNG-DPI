@@ -1,0 +1,3 @@
+@interface PRHDocument : NSDocument
+
+@end
