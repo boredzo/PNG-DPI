@@ -126,6 +126,7 @@ static const CGFloat inchesPerMeter = inchesPerCentimeter * centimetersPerMeter;
 	return self.pixelsWide / self.pixelsPerCentimeterWide;
 }
 - (void) setCentimetersWide:(CGFloat)centimetersWide {
+	[[[self undoManager] prepareWithInvocationTarget:self] setPixelsPerCentimeterWide:self.pixelsPerCentimeterWide];
 	self.pixelsPerCentimeterWide = self.pixelsWide / centimetersWide;
 }
 
@@ -133,6 +134,7 @@ static const CGFloat inchesPerMeter = inchesPerCentimeter * centimetersPerMeter;
 	return self.pixelsTall / self.pixelsPerCentimeterTall;
 }
 - (void) setCentimetersTall:(CGFloat)centimetersTall {
+	[[[self undoManager] prepareWithInvocationTarget:self] setPixelsPerCentimeterTall:self.pixelsPerCentimeterTall];
 	self.pixelsPerCentimeterTall = self.pixelsTall / centimetersTall;
 }
 
@@ -140,6 +142,7 @@ static const CGFloat inchesPerMeter = inchesPerCentimeter * centimetersPerMeter;
 	return self.pixelsWide / self.pixelsPerInchWide;
 }
 - (void) setInchesWide:(CGFloat)inchesWide {
+	[[[self undoManager] prepareWithInvocationTarget:self] setInchesWide:self.inchesWide];
 	self.pixelsPerInchWide = self.pixelsWide / inchesWide;
 }
 
@@ -147,6 +150,7 @@ static const CGFloat inchesPerMeter = inchesPerCentimeter * centimetersPerMeter;
 	return self.pixelsTall / self.pixelsPerInchTall;
 }
 - (void) setInchesTall:(CGFloat)inchesTall {
+	[[[self undoManager] prepareWithInvocationTarget:self] setInchesTall:self.inchesTall];
 	self.pixelsPerInchTall = self.pixelsTall / inchesTall;
 }
 
@@ -154,6 +158,7 @@ static const CGFloat inchesPerMeter = inchesPerCentimeter * centimetersPerMeter;
 	return [self.propertiesDictionary[(__bridge NSString *)kCGImagePropertyDPIWidth] doubleValue];
 }
 - (void) setPixelsPerInchWide:(CGFloat)pixelsPerInchWide {
+	[[[self undoManager] prepareWithInvocationTarget:self] setPixelsPerInchWide:self.pixelsPerInchWide];
 	CGFloat pixelsPerMeterWide = pixelsPerInchWide * inchesPerMeter;
 	[self setPixelsPerInchWide:pixelsPerInchWide andPixelsPerMeterWide:pixelsPerMeterWide];
 }
@@ -162,6 +167,7 @@ static const CGFloat inchesPerMeter = inchesPerCentimeter * centimetersPerMeter;
 	return [self.propertiesDictionary[(__bridge NSString *)kCGImagePropertyDPIHeight] doubleValue];
 }
 - (void) setPixelsPerInchTall:(CGFloat)pixelsPerInchTall {
+	[[[self undoManager] prepareWithInvocationTarget:self] setPixelsPerInchTall:self.pixelsPerInchTall];
 	CGFloat pixelsPerMeterTall = pixelsPerInchTall * inchesPerMeter;
 	[self setPixelsPerInchTall:pixelsPerInchTall andPixelsPerMeterTall:pixelsPerMeterTall];
 }
@@ -179,6 +185,7 @@ static const CGFloat inchesPerMeter = inchesPerCentimeter * centimetersPerMeter;
 	return self.pixelsPerMeterWide / centimetersPerMeter;
 }
 - (void) setPixelsPerCentimeterWide:(CGFloat)pixelsPerCentimeterWide {
+	[[[self undoManager] prepareWithInvocationTarget:self] setPixelsPerCentimeterWide:self.pixelsPerCentimeterWide];
 	self.pixelsPerMeterWide = pixelsPerCentimeterWide * centimetersPerMeter;
 }
 
@@ -186,6 +193,7 @@ static const CGFloat inchesPerMeter = inchesPerCentimeter * centimetersPerMeter;
 	return self.pixelsPerMeterTall / centimetersPerMeter;
 }
 - (void) setPixelsPerCentimeterTall:(CGFloat)pixelsPerCentimeterTall {
+	[[[self undoManager] prepareWithInvocationTarget:self] setPixelsPerCentimeterTall:self.pixelsPerCentimeterTall];
 	self.pixelsPerMeterTall = pixelsPerCentimeterTall * centimetersPerMeter;
 }
 
@@ -193,6 +201,7 @@ static const CGFloat inchesPerMeter = inchesPerCentimeter * centimetersPerMeter;
 	return [self.propertiesDictionary[(__bridge NSString *)kCGImagePropertyPNGDictionary][(__bridge NSString *)kCGImagePropertyPNGXPixelsPerMeter] doubleValue];
 }
 - (void) setPixelsPerMeterWide:(CGFloat)pixelsPerMeterWide {
+	[[[self undoManager] prepareWithInvocationTarget:self] setPixelsPerMeterWide:self.pixelsPerMeterWide];
 	CGFloat pixelsPerInchWide = pixelsPerMeterWide / inchesPerMeter;
 	[self setPixelsPerInchWide:pixelsPerInchWide andPixelsPerMeterWide:pixelsPerMeterWide];
 }
@@ -201,6 +210,7 @@ static const CGFloat inchesPerMeter = inchesPerCentimeter * centimetersPerMeter;
 	return [self.propertiesDictionary[(__bridge NSString *)kCGImagePropertyPNGDictionary][(__bridge NSString *)kCGImagePropertyPNGYPixelsPerMeter] doubleValue];
 }
 - (void) setPixelsPerMeterTall:(CGFloat)pixelsPerMeterTall {
+	[[[self undoManager] prepareWithInvocationTarget:self] setPixelsPerMeterTall:self.pixelsPerMeterTall];
 	CGFloat pixelsPerInchTall = pixelsPerMeterTall / inchesPerMeter;
 	[self setPixelsPerInchTall:pixelsPerInchTall andPixelsPerMeterTall:pixelsPerMeterTall];
 }
