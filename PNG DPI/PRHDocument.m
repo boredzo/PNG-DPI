@@ -46,7 +46,6 @@ static const CGFloat inchesPerMeter = inchesPerCentimeter * centimetersPerMeter;
 - (CGFloat) centimetersWide {
 	return self.pixelsWide / self.pixelsPerCentimeterWide;
 }
-
 - (void) setCentimetersWide:(CGFloat)centimetersWide {
 	self.pixelsPerCentimeterWide = self.pixelsWide / centimetersWide;
 }
@@ -54,7 +53,6 @@ static const CGFloat inchesPerMeter = inchesPerCentimeter * centimetersPerMeter;
 - (CGFloat) centimetersTall {
 	return self.pixelsTall / self.pixelsPerCentimeterTall;
 }
-
 - (void) setCentimetersTall:(CGFloat)centimetersTall {
 	self.pixelsPerCentimeterTall = self.pixelsTall / centimetersTall;
 }
@@ -62,7 +60,6 @@ static const CGFloat inchesPerMeter = inchesPerCentimeter * centimetersPerMeter;
 - (CGFloat) inchesWide {
 	return self.pixelsWide / self.pixelsPerInchWide;
 }
-
 - (void) setInchesWide:(CGFloat)inchesWide {
 	self.pixelsPerInchWide = self.pixelsWide / inchesWide;
 }
@@ -70,7 +67,6 @@ static const CGFloat inchesPerMeter = inchesPerCentimeter * centimetersPerMeter;
 - (CGFloat) inchesTall {
 	return self.pixelsTall / self.pixelsPerInchTall;
 }
-
 - (void) setInchesTall:(CGFloat)inchesTall {
 	self.pixelsPerInchTall = self.pixelsTall / inchesTall;
 }
