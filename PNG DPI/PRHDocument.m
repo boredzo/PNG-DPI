@@ -38,15 +38,9 @@ static const CGFloat inchesPerMeter = inchesPerCentimeter * centimetersPerMeter;
 - (CGFloat) pixelsWide {
 	return [_props[(__bridge NSString *)kCGImagePropertyPixelWidth] doubleValue];
 }
-- (void) setPixelsWide:(CGFloat)pixelsWide {
-	_props[(__bridge NSString *)kCGImagePropertyPixelWidth] = @(pixelsWide);
-}
 
 - (CGFloat) pixelsTall {
 	return [_props[(__bridge NSString *)kCGImagePropertyPixelHeight] doubleValue];
-}
-- (void) setPixelsTall:(CGFloat)pixelsTall {
-	_props[(__bridge NSString *)kCGImagePropertyPixelHeight] = @(pixelsTall);
 }
 
 - (CGFloat) centimetersWide {
