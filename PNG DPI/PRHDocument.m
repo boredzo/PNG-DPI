@@ -6,9 +6,14 @@ static const CGFloat centimetersPerInch = 2.54;
 static const CGFloat inchesPerCentimeter = 1.0 / centimetersPerInch;
 static const CGFloat inchesPerMeter = inchesPerCentimeter * centimetersPerMeter;
 
+@interface PRHDocument ()
+
+@property(nonatomic, strong) NSMutableDictionary *propertiesDictionary;
+
+@end
+
 @implementation PRHDocument
 {
-	NSMutableDictionary *_props;
 	CGImageSourceRef _imageSource;
 }
 
@@ -36,11 +41,85 @@ static const CGFloat inchesPerMeter = inchesPerCentimeter * centimetersPerMeter;
 }
 
 - (CGFloat) pixelsWide {
-	return [_props[(__bridge NSString *)kCGImagePropertyPixelWidth] doubleValue];
+	return [self.propertiesDictionary[(__bridge NSString *)kCGImagePropertyPixelWidth] doubleValue];
 }
 
 - (CGFloat) pixelsTall {
-	return [_props[(__bridge NSString *)kCGImagePropertyPixelHeight] doubleValue];
+	return [self.propertiesDictionary[(__bridge NSString *)kCGImagePropertyPixelHeight] doubleValue];
+}
+
++ (NSSet *) keyPathsForValuesAffectingValueForKey:(NSString *)key {
+	NSSet *baseSet = [super keyPathsForValuesAffectingValueForKey:key];
+
+	NSRange keyRange = (NSRange){ 0, [key length] };
+	NSRegularExpression *regularExpression;
+	NSTextCheckingResult *result;
+
+	regularExpression = [NSRegularExpression regularExpressionWithPattern:@"(inch|centimeter)e?s(Wide|Tall)"
+	                                                             options:0
+		                                                           error:NULL];
+	result = [regularExpression firstMatchInString:key options:NSMatchingAnchored range:keyRange];
+	if (result) {
+		//This is a (unit)s(axis) key.
+		NSString *unit = [key substringWithRange:[result rangeAtIndex:1]];
+		NSMutableSet *otherUnits = [self setOfUnitsThatAreNot:unit];
+		NSString *axis = [key substringWithRange:[result rangeAtIndex:2]];
+		NSMutableSet *set = [[baseSet setByAddingObjectsFromArray:@[
+			@"propertiesDictionary",
+			[@"pixels" stringByAppendingString:axis],
+			[@"pixelsPerInch" stringByAppendingString:axis],
+			[@"pixelsPerCentimeter" stringByAppendingString:axis],
+		]] mutableCopy];
+		for (unit in otherUnits) {
+			[set addObject:[[self pluralizeUnit:unit]
+				stringByAppendingString:axis]];
+		}
+		return set;
+	}
+
+	regularExpression = [NSRegularExpression regularExpressionWithPattern:@"pixelsPer(Inch|Centimeter)(Wide|Tall)"
+	                                                              options:0
+		                                                            error:NULL];
+	result = [regularExpression firstMatchInString:key options:NSMatchingAnchored range:keyRange];
+	if (result) {
+		//This is a pixelsPer(unit)(axis) key.
+		NSString *unit = [[key substringWithRange:[result rangeAtIndex:1]] lowercaseString];
+		NSMutableSet *otherUnits = [self setOfUnitsThatAreNot:unit];
+		NSString *axis = [key substringWithRange:[result rangeAtIndex:2]];
+		NSMutableSet *set = [[baseSet setByAddingObjectsFromArray:@[
+			@"propertiesDictionary",
+			[@"pixels" stringByAppendingString:axis],
+			[@"inches" stringByAppendingString:axis],
+			[@"centimeters" stringByAppendingString:axis],
+		]] mutableCopy];
+		for (unit in otherUnits) {
+			[set addObject:[[@"pixelsPer" stringByAppendingString:unit]
+				stringByAppendingString:axis]];
+		}
+		return set;
+	}
+
+	if ([key hasPrefix:@"pixels"]) {
+		//This is a pixels(axis) key.
+		return [baseSet setByAddingObject:@"propertiesDictionary"];
+	}
+
+	//No match.
+	return baseSet;
+}
+
++ (NSString *) pluralizeUnit:(NSString *)unit {
+	return [unit isEqualToString:@"inch"]
+		? @"es"
+		: @"s";
+}
+
++ (NSMutableSet *) setOfUnitsThatAreNot:(NSString *)unit {
+	NSMutableSet *allUnits = [NSMutableSet setWithArray:@[
+		@"inch", @"centimeter"
+	]];
+	[allUnits removeObject:unit];
+	return allUnits;
 }
 
 - (CGFloat) centimetersWide {
@@ -72,7 +151,7 @@ static const CGFloat inchesPerMeter = inchesPerCentimeter * centimetersPerMeter;
 }
 
 - (CGFloat) pixelsPerInchWide {
-	return [_props[(__bridge NSString *)kCGImagePropertyDPIWidth] doubleValue];
+	return [self.propertiesDictionary[(__bridge NSString *)kCGImagePropertyDPIWidth] doubleValue];
 }
 - (void) setPixelsPerInchWide:(CGFloat)pixelsPerInchWide {
 	CGFloat pixelsPerMeterWide = pixelsPerInchWide * inchesPerMeter;
@@ -80,7 +159,7 @@ static const CGFloat inchesPerMeter = inchesPerCentimeter * centimetersPerMeter;
 }
 
 - (CGFloat) pixelsPerInchTall {
-	return [_props[(__bridge NSString *)kCGImagePropertyDPIHeight] doubleValue];
+	return [self.propertiesDictionary[(__bridge NSString *)kCGImagePropertyDPIHeight] doubleValue];
 }
 - (void) setPixelsPerInchTall:(CGFloat)pixelsPerInchTall {
 	CGFloat pixelsPerMeterTall = pixelsPerInchTall * inchesPerMeter;
@@ -88,12 +167,12 @@ static const CGFloat inchesPerMeter = inchesPerCentimeter * centimetersPerMeter;
 }
 
 - (void) setPixelsPerInchWide:(CGFloat)pixelsPerInchWide andPixelsPerMeterWide:(CGFloat)pixelsPerMeterWide {
-	_props[(__bridge NSString *)kCGImagePropertyDPIWidth] = @(pixelsPerInchWide);
-	_props[(__bridge NSString *)kCGImagePropertyPNGDictionary][(__bridge NSString *)kCGImagePropertyPNGXPixelsPerMeter] = @(pixelsPerMeterWide);
+	self.propertiesDictionary[(__bridge NSString *)kCGImagePropertyDPIWidth] = @(pixelsPerInchWide);
+	self.propertiesDictionary[(__bridge NSString *)kCGImagePropertyPNGDictionary][(__bridge NSString *)kCGImagePropertyPNGXPixelsPerMeter] = @(pixelsPerMeterWide);
 }
 - (void) setPixelsPerInchTall:(CGFloat)pixelsPerInchTall andPixelsPerMeterTall:(CGFloat)pixelsPerMeterTall {
-	_props[(__bridge NSString *)kCGImagePropertyDPIHeight] = @(pixelsPerInchTall);
-	_props[(__bridge NSString *)kCGImagePropertyPNGDictionary][(__bridge NSString *)kCGImagePropertyPNGYPixelsPerMeter] = @(pixelsPerMeterTall);
+	self.propertiesDictionary[(__bridge NSString *)kCGImagePropertyDPIHeight] = @(pixelsPerInchTall);
+	self.propertiesDictionary[(__bridge NSString *)kCGImagePropertyPNGDictionary][(__bridge NSString *)kCGImagePropertyPNGYPixelsPerMeter] = @(pixelsPerMeterTall);
 }
 
 - (CGFloat) pixelsPerCentimeterWide {
@@ -111,7 +190,7 @@ static const CGFloat inchesPerMeter = inchesPerCentimeter * centimetersPerMeter;
 }
 
 - (CGFloat) pixelsPerMeterWide {
-	return [_props[(__bridge NSString *)kCGImagePropertyPNGDictionary][(__bridge NSString *)kCGImagePropertyPNGXPixelsPerMeter] doubleValue];
+	return [self.propertiesDictionary[(__bridge NSString *)kCGImagePropertyPNGDictionary][(__bridge NSString *)kCGImagePropertyPNGXPixelsPerMeter] doubleValue];
 }
 - (void) setPixelsPerMeterWide:(CGFloat)pixelsPerMeterWide {
 	CGFloat pixelsPerInchWide = pixelsPerMeterWide / inchesPerMeter;
@@ -119,7 +198,7 @@ static const CGFloat inchesPerMeter = inchesPerCentimeter * centimetersPerMeter;
 }
 
 - (CGFloat) pixelsPerMeterTall {
-	return [_props[(__bridge NSString *)kCGImagePropertyPNGDictionary][(__bridge NSString *)kCGImagePropertyPNGYPixelsPerMeter] doubleValue];
+	return [self.propertiesDictionary[(__bridge NSString *)kCGImagePropertyPNGDictionary][(__bridge NSString *)kCGImagePropertyPNGYPixelsPerMeter] doubleValue];
 }
 - (void) setPixelsPerMeterTall:(CGFloat)pixelsPerMeterTall {
 	CGFloat pixelsPerInchTall = pixelsPerMeterTall / inchesPerMeter;
@@ -130,18 +209,18 @@ static const CGFloat inchesPerMeter = inchesPerCentimeter * centimetersPerMeter;
 	NSDictionary *sourceOptions = @{ (__bridge NSString *)kCGImageSourceTypeIdentifierHint: (__bridge NSString *)kUTTypePNG };
 	_imageSource = CGImageSourceCreateWithData((__bridge CFDataRef)data, (__bridge CFDictionaryRef)sourceOptions);
 
-	_props = [[self extractImagePropertiesFromSource:_imageSource] mutableCopy];
+	self.propertiesDictionary = [[self extractImagePropertiesFromSource:_imageSource] mutableCopy];
 
-	return (_props != nil);
+	return (self.propertiesDictionary != nil);
 }
 
 - (BOOL) readFromURL:(NSURL *)url ofType:(NSString *)typeName error:(NSError **)outError {
 	NSDictionary *sourceOptions = @{ (__bridge NSString *)kCGImageSourceTypeIdentifierHint: (__bridge NSString *)kUTTypePNG };
 	_imageSource = CGImageSourceCreateWithURL((__bridge CFURLRef)url, (__bridge CFDictionaryRef)sourceOptions);
 
-	_props = [[self extractImagePropertiesFromSource:_imageSource] mutableCopy];
+	self.propertiesDictionary = [[self extractImagePropertiesFromSource:_imageSource] mutableCopy];
 
-	return (_props != nil);
+	return (self.propertiesDictionary != nil);
 }
 
 - (NSDictionary *) extractImagePropertiesFromSource:(CGImageSourceRef)imageSource {
@@ -173,7 +252,7 @@ static const CGFloat inchesPerMeter = inchesPerCentimeter * centimetersPerMeter;
 
 - (bool) writeToDestination:(CGImageDestinationRef)imageDestination {
 	CGImageDestinationAddImageFromSource(imageDestination, _imageSource, /*idx*/ 0,
-		(__bridge CFDictionaryRef)_props
+		(__bridge CFDictionaryRef)self.propertiesDictionary
 	);
 	bool finalized = CGImageDestinationFinalize(imageDestination);
 	CFRelease(imageDestination);
